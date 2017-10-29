@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
+
 import flask
 from flask import Flask,render_template
 import os
 import json
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 class Files():
 	def __init__(self):
@@ -15,6 +17,7 @@ class Files():
 
 	def _read_all_files(self):
 		file_dict = {}
+		f_path = '/home/shiyanlou/files'
 		for filename in self.filename_list:
 			with open(f_path + '/' + filename) as file:
 				 file_dict[filename] = json.load(file)
@@ -48,24 +51,25 @@ class Files():
 		return self.file_dict[filename]
 
 
-files = Files
+files = Files()
 
 @app.route('/')
 def index():
-	return render_template('index.html',files.filename_list)
+	filename_list = files.get_filename_list()
+	return render_template('index.html',filename_list=filename_list )
 
 @app.route('/files/<filename>')
 def file(filename):
-	_file = files.get_file_by_filename(filename)
-	if filename in file_dict:
-		return render_template('file.html',_file)
+	if filename in files.file_dict:
+		_file = files.get_file_by_filename(filename)
+		return render_template('file.html',_file=_file)
 	else:
-		return render_template('404.html',404)		
+		return render_template('404.html'),404		
 
 @app.errorhandler
 def not_found(error):
-	return render_template('404.html',404)
+	return render_template('404.html'),404
 
 
-if __name__ == '__main__'
+if __name__ == '__main__':
 	app.run()
