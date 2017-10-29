@@ -1,10 +1,16 @@
-{% extend "base.html" %}
-{% from 'file.html' import sth %}
+<!DOCTYPE html >
+<html lang = "zh-CN">
 
-{% block header %}
-	<h1> header </h1>
-{% endblock %}
+<head>
+	<meta charset='utf-8'>
+	<title>files</title>
+</head>
 
-{% block content %}
-	{{ sth }}
-{% endblock %}
+<body>
+	<u1>
+		{% for file in filename_list%}
+		<li> {{ file }}</li>
+		{% endofr %}
+	</u1>
+</body>
+</html>

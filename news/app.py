@@ -1,37 +1,29 @@
 #!/usr/bin/env python3
-
+import flask
 from flask import Flask,render_template
 import os
 import json
 
 app = Flask(__name__)
 
-def dict_operation(file_dict):
-	data = {}
-	for key,value in file_dict.items():
-		key = key.encode()
-		value = value.encode()
-		data[key] = value
-	data['content'] = data['content'].split(' \\\\n ')
+class Files():
+	def __init__(self):
+		self.path = '/home/shiyanlou/files'
+		self.filename_list = self._get_filename_in_files()
+		self.file_dict = self._read_all_files()
 
-	return data
 
-@app.route('/')
-def index():
-		
-	path = '/home/shiyanlou/files'
-	s = os.listdir('/home/shiyanlou/files')
+	def _read_all_files(self):
+		file_dict = {}
+		for filename in self.filename_list:
+			with open(f_path + '/' + filename) as file:
+				 file_dict[filename] = json.load(file)
+		return file_dict
 
-	f_path = '/home/shiyanlou/files'
-	filename_list = os.listdir('/home/shiyanlou/files')
-
-	file_dict = {}
-
-	for filename in filename_list:
-		with open(f_path + '/' + filename) as file:
-			 file_dict[filename] = json.load(file)
-
-	return render_template('index.html',file_dict)
+#		for filename in self.filename_list:
+#			for key,value in file_dict[filename].items():
+#				key = key.encode()
+#				value = value.encode()
 
 #	a = filename_list[0]
 #	print(dict_operation(file_dict[a]))
@@ -42,18 +34,38 @@ def index():
 #	print(s['a'][1])
 
 
+	def _get_filename_in_files(self):
+		
+		s = os.listdir('/home/shiyanlou/files')
+		f_path = '/home/shiyanlou/files'
+		filename_list = os.listdir('/home/shiyanlou/files')
+		return filename_list
+
+	def get_filename_list(self):
+		return self.filename_list
+
+	def get_file_by_filename(self,filename):
+		return self.file_dict[filename]
 
 
+files = Files
 
-
+@app.route('/')
+def index():
+	return render_template('index.html',files.filename_list)
 
 @app.route('/files/<filename>')
 def file(filename):
-	pass
-
-
-
+	_file = files.get_file_by_filename(filename)
+	if filename in file_dict:
+		return render_template('file.html',_file)
+	else:
+		return render_template('404.html',404)		
 
 @app.errorhandler
 def not_found(error):
 	return render_template('404.html',404)
+
+
+if __name__ == '__main__'
+	app.run()
