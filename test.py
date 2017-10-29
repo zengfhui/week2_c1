@@ -26,13 +26,15 @@ def dict_operation(file_dict):
 		key = key.encode()
 		value = value.encode()
 		data[key] = value
-	data['content'] = data['content'].split(' \\\\n ')
+	data['content'] = data['content'].split(' \\n ')
 
 	return data
 
-a = filename_list[0]
-print(dict_operation(file_dict[a]))
-
+#a = filename_list[1]
+#print(dict_operation(file_dict[a]))
+#d = dict_operation(file_dict[a])
+#for line in d['content']:
+#	print(line)
 
 
 a ={1:1}
@@ -40,5 +42,3 @@ b ={2:2}
 c ={3:3}
 s ={'a':a,'b':b}
 print(s['a'][1])
-
-
