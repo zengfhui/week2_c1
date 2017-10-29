@@ -1,0 +1,10 @@
+{% extend "base.html" %}
+{% from 'file.html' import sth %}
+
+{% block header %}
+	<h1> header </h1>
+{% endblock %}
+
+{% block content %}
+	{{ sth }}
+{% endblock %}
