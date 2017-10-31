@@ -20,16 +20,7 @@ class Files():
 		f_path = '/home/shiyanlou/files'
 		for filename in self.filename_list:
 			with open(f_path + '/' + filename) as file:
-				 file_dict[filename] = json.load(file)
-			temp1 = file_dict[filename]['content'].split('\\n')
-			temp2 = []
-			for s in temp1:
-				s1 = s.strip('\\')
-				s2 = s1.strip()
-				temp2.append(s2)
-			delimiter =' '
-			temp3 = delimiter.join(temp2)
-			file_dict[filename]['content'] = temp3
+				 file_dict[filename[:-5]] = json.load(file)	#[:-5],get rid of '.json'
 		return file_dict
 
 #		for filename in self.filename_list:
@@ -73,9 +64,9 @@ def file(filename):
 		_file = files.get_file_by_filename(filename)
 		return render_template('file.html',_file=_file)
 	else:
-		return render_template('404.html'),404		
+		return render_template('404.html'),404	
 
-@app.errorhandler
+@app.errorhandler(404)
 def not_found(error):
 	return render_template('404.html'),404
 
